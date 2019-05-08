@@ -1,0 +1,54 @@
+class Solution:
+#题目一：
+#假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+#每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+#解法1：数学组合 88ms 12.7mb 对比：速度太慢战胜10%，储存小，战胜99%
+    def climbStairs(self, n: int) -> int:
+        import math
+        maxy=math.floor(n/2)#最多向下取整(n/)个2阶步
+        num=0
+        y=0
+        while y<=(maxy):
+        #若y个2阶步，则总共走n-y步，实际上就是求y个2阶步在n-y的可能位置，即求组合C(n-y  y)
+            num=num+(math.factorial(n-y))/(math.factorial(n-2*y)*math.factorial(y))
+            y=y+1
+        return int(num)
+#解法2：递归(直接递归重复计算，时间超出限制）
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n==1:
+            return 1
+        elif n==2:
+            return 2
+        else:
+            return self.climbStairs(n-1)+self.climbStairs(n-2)
+            
+#揭解法3：用循环代替递归，减少重复次数56ms,13.1mb,速度提升，前42%
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        #小于2次的时候是n种
+        if n<=2:
+            return n
+        #大于2次数时，f(n)=f(n-1)+f(n-2)
+        #从下往上计算时，记住前两步f(n-2)和f(n-1)的值为a,b,
+        #下一次计算时，f(n-1)变成b,f(n)变成a
+        else:
+            a=1
+            b=2
+            k=3
+            while k<n+1:
+                temp=a+b
+                a=b
+                b=temp
+                k=k+1
+            return temp
+ 
+#解法4：同理解法3，用字典方式记录存储，有点是如果
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        mo={}
+        mo[1]=1
+        mo[2]=2
+        for k in range(3,n+1):
+            mo[k]=mo[k-1]+mo[k-2]
+        return mo[n]
